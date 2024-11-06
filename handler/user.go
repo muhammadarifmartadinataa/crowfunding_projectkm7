@@ -29,7 +29,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 
 		response := helper.APIResponse("Register Account failed", http.StatusUnprocessableEntity, "error", errorMessage)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
@@ -49,4 +49,13 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 
+}
+
+func (h *userHandler) Login(c *gin.Context) {
+	//user memasukan input (email & password)
+	//input ditangkap handler
+	//mapping dari input user ke input struct
+	//input struct kita passing ke service
+	//diservice mencari dengan bantuan repository user dengan email
+	//jika ketemu maka kita perlu mencocokan password
 }
