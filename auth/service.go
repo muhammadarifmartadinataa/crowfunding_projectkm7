@@ -1,10 +1,14 @@
 package auth
 
-import "github.com/golang-jwt/jwt"
+import (
+	"errors"
 
-// Generate Token
+	"github.com/golang-jwt/jwt"
+)
+
 type Service interface {
 	GenerateToken(userID int) (string, error)
+	ValidateToken(token string) (*jwt.Token, error)
 }
 
 type jwtService struct {
@@ -16,6 +20,7 @@ func NewService() *jwtService {
 	return &jwtService{}
 }
 
+// Generate Token
 func (s *jwtService) GenerateToken(userID int) (string, error) {
 	//payload
 	claim := jwt.MapClaims{}
@@ -31,4 +36,19 @@ func (s *jwtService) GenerateToken(userID int) (string, error) {
 
 }
 
-//Validasi Token
+// Validasi Token
+func (s *jwtService) ValidateToken(encodedToken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+
+		if !ok {
+			return nil, errors.New("Invalid Token")
+		}
+		return []byte(SECRET_KEY), nil
+	})
+
+	if err != nil {
+		return token, err
+	}
+	return token, nil
+}
