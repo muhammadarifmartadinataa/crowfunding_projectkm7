@@ -2,28 +2,21 @@ package main
 
 import (
 	"crowfundig/auth"
+	"crowfundig/config"
 	"crowfundig/handler"
 	"crowfundig/helper"
 	"crowfundig/user"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := "root:@rif123#@tcp(127.0.0.1:3306)/crowfunding_miniproject?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, _ := config.ConnectDatabase()
+	config.MigrateDB(db)
 
-	db.AutoMigrate(&user.User{})
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
