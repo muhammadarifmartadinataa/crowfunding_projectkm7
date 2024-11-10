@@ -14,6 +14,8 @@ func main() {
 	dsn := "root:@rif123#@tcp(127.0.0.1:3306)/crowfunding_miniproject?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
+	db.AutoMigrate(&user.User{})
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -38,3 +40,4 @@ func main() {
 // handler mapping input dari user menjadi  struct input
 // service mapping dari struct input  ke struct User
 // repository save struct User ke db
+//db (gorm)

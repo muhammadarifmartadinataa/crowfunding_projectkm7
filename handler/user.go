@@ -3,6 +3,7 @@ package handler
 import (
 	"crowfundig/helper"
 	"crowfundig/user"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -141,8 +142,12 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+	//save avatar ke user yang melakukan request
+	UserID := 36
+
 	// simpan gambarnya di folder "images/"
-	path := "images/" + file.Filename
+	path := fmt.Sprintf("images/%d-%s", UserID, file.Filename)
+
 	err = c.SaveUploadedFile(file, path)
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
@@ -151,9 +156,6 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-
-	//save avatar ke user yang melakukan request
-	UserID := 1
 
 	_, err = h.userService.SaveAvatar(UserID, path)
 	if err != nil {
