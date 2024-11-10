@@ -13,6 +13,4 @@ type User struct {
 	Token          string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
-	// Campaigns      []Campaign    `gorm:"foreignKey:UserID"`
-	// Transactions   []Transaction `gorm:"foreignKey:UserID"`
 }
