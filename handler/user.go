@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"crowfundig/auth"
 	"crowfundig/helper"
 	"crowfundig/user"
 	"fmt"
@@ -11,10 +12,11 @@ import (
 
 type userHandler struct {
 	userService user.Service
+	authService auth.Service
 }
 
-func NewUserHandler(userService user.Service) *userHandler {
-	return &userHandler{userService}
+func NewUserHandler(userService user.Service, authService auth.Service) *userHandler {
+	return &userHandler{userService, authService}
 }
 
 func (h *userHandler) RegisterUser(c *gin.Context) {
@@ -43,9 +45,15 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	//token, err :=  h.jswtService.GenerateToken()
+	token, err := h.authService.GenerateToken(int(newUser.ID))
+	if err != nil {
+		response := helper.APIResponse("Register Account failed", http.StatusBadRequest, "error", nil)
 
-	formatter := user.FormatUser(newUser, "tokentokentoken")
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	formatter := user.FormatUser(newUser, token)
 	response := helper.APIResponse("Account hass been registered", http.StatusOK, "succes", formatter)
 
 	c.JSON(http.StatusOK, response)
@@ -81,8 +89,16 @@ func (h *userHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
+
+	token, err := h.authService.GenerateToken(int(loggedinUser.ID))
+	if err != nil {
+		response := helper.APIResponse("Login failed", http.StatusBadRequest, "error", nil)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
 	//jika login berhasil maka perlu balikan loggedinUser ke dalam format json
-	formatter := user.FormatUser(loggedinUser, "tokentokentoken")
+	formatter := user.FormatUser(loggedinUser, token)
 
 	response := helper.APIResponse("Succesfuly logedin", http.StatusOK, "succes", formatter)
 
