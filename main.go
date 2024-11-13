@@ -2,10 +2,12 @@ package main
 
 import (
 	"crowfundig/auth"
+	"crowfundig/campaign"
 	"crowfundig/config"
 	"crowfundig/handler"
 	"crowfundig/helper"
 	"crowfundig/user"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -16,8 +18,24 @@ import (
 func main() {
 	db, _ := config.ConnectDatabase()
 	config.MigrateDB(db)
-
 	userRepository := user.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, _ := campaignRepository.FindByUserID(18)
+
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println("debug")
+	fmt.Println(len(campaigns))
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println("jumlah gambar")
+			fmt.Println(len(campaign.CampaignImages))
+			fmt.Println(campaign.CampaignImages[0].FileName)
+		}
+
+	}
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
