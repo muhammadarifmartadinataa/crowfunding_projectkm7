@@ -7,18 +7,23 @@ import (
 	"crowfundig/handler"
 	"crowfundig/helper"
 	"crowfundig/user"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	loadEnv()
 	db, _ := config.ConnectDatabase()
 	config.MigrateDB(db)
+
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	// transactionRepository := transaction.NewRepository(db)
 
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
@@ -43,6 +48,13 @@ func main() {
 	api.POST("/campaign-images", authMiddleware(authService, userService), campaignHandler.UploadImage)
 
 	router.Run()
+}
+func loadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+		panic("failed lod env")
+	}
 }
 
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
