@@ -1,6 +1,6 @@
 package payment
 
 type Transaction struct {
-	ID     int
+	ID     int `gorm:"primary_key"`
 	Amount int
 }
