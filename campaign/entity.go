@@ -6,7 +6,7 @@ import (
 )
 
 type Campaign struct {
-	ID               int
+	ID               int `gorm:"primaryKey"`
 	Name             string
 	ShortDescription string
 	Description      string
@@ -23,7 +23,7 @@ type Campaign struct {
 }
 
 type CampaignImage struct {
-	ID         int
+	ID         int `gorm:"primaryKey"`
 	CampaignID int
 	FileName   string
 	IsPrimary  int

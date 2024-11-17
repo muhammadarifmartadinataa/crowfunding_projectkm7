@@ -1,7 +1,7 @@
 package user
 
 type UserFormatter struct {
-	ID         int    `json:"id"`
+	ID         int    `json:"id" gorm:"primaryKey"`
 	Name       string `json:"name"`
 	Occupation string `json:"occupation"`
 	Email      string `json:"email"`
