@@ -56,7 +56,7 @@ func main() {
 	api.POST("/transactions", middleware.AuthMiddleware(authService, userService), transactionHandler.CreateTransaction)
 	api.POST("/transactions/notification", transactionHandler.GetNotification)
 
-	router.Run()
+	router.Run(":8080")
 }
 
 func loadEnv() {
