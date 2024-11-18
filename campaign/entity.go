@@ -10,6 +10,7 @@ type Campaign struct {
 	Name             string
 	ShortDescription string
 	Description      string
+	Content          string `json:"content"`
 	GoalAmount       int
 	CurrentAmount    int
 	Perks            string

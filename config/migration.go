@@ -2,6 +2,7 @@ package config
 
 import (
 	"crowfundig/campaign"
+	"crowfundig/gemini"
 	"crowfundig/transaction"
 	"crowfundig/user"
 
@@ -9,5 +10,5 @@ import (
 )
 
 func MigrateDB(db *gorm.DB) {
-	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &transaction.Transaction{})
+	db.AutoMigrate(&user.User{}, &campaign.Campaign{}, &campaign.CampaignImage{}, &transaction.Transaction{}, &gemini.GeminiResponse{})
 }

@@ -4,6 +4,7 @@ import (
 	"crowfundig/auth"
 	"crowfundig/campaign"
 	"crowfundig/config"
+	"crowfundig/gemini"
 	"crowfundig/handler"
 	"crowfundig/middleware"
 	"crowfundig/payment"
@@ -24,21 +25,27 @@ func main() {
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
 	transactionRepository := transaction.NewRepository(db)
+	geminiRepository := gemini.NewGeminiRepository(db)
 
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 	paymentService := payment.NewService()
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
+	geminiService := gemini.NewGeminiService(geminiRepository)
 
 	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
 	transactionHandler := handler.NewTransactionHandler(transactionService)
+	geminiHandler := handler.NewGeminiHandler(geminiService)
 
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.Static("/images", "./images")
 	api := router.Group("/api/v1")
+
+	api.POST("/gemini", geminiHandler.SaveGeminiResponse)
+	api.GET("/gemini", geminiHandler.GetGeminiResponses)
 
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
