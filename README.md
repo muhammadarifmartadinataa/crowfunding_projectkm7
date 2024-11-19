@@ -1,4 +1,5 @@
 REST API CROWFUNDING
+
 Aplikasi Crowdfunding untuk Unit Kegiatan Mahasiswa (UKM) Programming Teknokrat adalah aplikasi yang memungkinkan mahasiswa untuk menggalang dana dalam mendukung berbagai proyek atau kegiatan yang bermanfaat bagi UKM Programming Teknokrat
 
 Aplikasi ini memungkinkan pengguna, khususnya anggota UKM Programming, untuk membuat kampanye penggalangan dana, menambahkan deskripsi proyek, menentukan target dana, dan mengunggah gambar kampanye. Setiap kampanye terhubung langsung dengan akun pengguna yang memulai kampanye tersebut. Pengguna lain dapat melihat berbagai kampanye yang tersedia dan berkontribusi dengan memberikan donasi melalui fitur transaksi yang ada.
